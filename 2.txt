@@ -1,0 +1,251 @@
+//1.	Вставить новую строку после строки, в которой находится первый встреченный минимальный элемент.
+//2.	Вставить новый столбец перед всеми столбцами, в которых встречается заданное число.
+//3.	Удалить все строки, в которых нет ни одного четного элемента.
+//4.	Удалить все столбцы, в которых все элементы положительны.
+//5.	Удалить из массива k-тую строку и j-тый столбец, если их значения совпадают.
+//6.	Уплотнить массив, удалив из него все нулевые строки и столбцы. 
+
+using System;
+namespace ConsoleApplication
+{
+    class Class
+    {
+        static int[,] Input(out int n, out int m)
+        {
+               
+                Console.WriteLine("введите размерность массива");
+                Console.Write("n=");
+                n = int.Parse(Console.ReadLine());
+                Console.Write("m=");
+                m = int.Parse(Console.ReadLine());
+                int[,] a = new int[n+5,m+5];
+                for (int i = 0; i < n; ++i)
+                    for (int j = 0; j < m; ++j)
+                    {
+                        Console.Write("a[{0},{1}]= ", i, j);
+                        a[i, j] = int.Parse(Console.ReadLine());
+                    }
+                    return a;
+         }
+        
+        static void Print(int[,] a, int n, int m)
+        {
+            for (int i = 0; i < n; ++i, Console.WriteLine())
+            for (int j = 0; j < m; ++j)
+                Console.Write("{0,5} ", a[i,j]);
+                Console.WriteLine();
+        }
+        static int[,] PlusStroka(int[,] a, ref int n, ref int m)
+        {
+            int min = 100000;
+            int stroka=0;
+            for (int i = 0; i < n; ++i)
+                for (int j = 0; j < m; ++j)
+                    if (a[i, j] < min)
+                    {
+                        min = a[i, j];
+                       stroka = i;
+                    }
+            for (int i = n; i > stroka; --i)
+                for (int j = 0; j < m; ++j)
+                    a[i + 1, j] = a[i, j];
+            ++n;
+
+            for (int j = 0; j < m; ++j)
+            {
+
+                a[stroka+1, j] = 0;
+            }
+            
+            Console.WriteLine();
+            return a;
+        }
+
+
+        static int[,] PlusStolbets(int[,] a, ref int n, ref int m, int id)
+        {
+           int stolb=0, flag;
+            for (int j = 0; j < m; ++j)
+            {flag = 0;
+                for (int i = 0; i < n; ++i)
+                     if (a[i, j] == id)
+                       flag = 1;
+                if (flag == 1)
+                {
+                    stolb = j;
+                    
+                    for (int jj = m; jj >= stolb; --jj)
+                        for (int ii = 0; ii < n; ++ii)
+
+                            a[ii, jj + 1] = a[ii, jj];
+                    ++m;
+                    j++;
+                        for (int ii = 0; ii < n; ++ii)
+                        
+
+                            a[ii, stolb] = 0;
+                        }
+                    }
+            Console.WriteLine();
+            return a;
+        }
+
+        static int[,] UdalNeChetStrok(int[,] a, ref int n, ref int m)
+        {
+            int stroka = 0, flag;
+            for (int i = 0; i < n; ++i)
+              {
+                flag = 1;
+                for (int j = 0; j < m; ++j)
+                    if (a[i, j] % 2 == 0)
+                        flag = 0;
+                if (flag == 1)
+                {
+                    stroka = i;
+
+for (int ii = stroka; ii < n-1; ++ii)
+                    for (int jj = 0; jj <m; ++jj)
+                                 a[ii, jj] = a[ii+1, jj];
+                    --n;
+                   }
+            }
+            Console.WriteLine();
+            return a;
+        }
+
+        static int[,] UdalPolozStolb(int[,] a, ref int n, ref int m)
+        {
+            int stolb = 0, flag;
+            for (int j = 0; j < m; ++j)
+            {
+                flag = 0;
+                for (int i = 0; i < n; ++i)
+                    if (a[i, j] < 0)
+                        flag = 1;
+                if (flag == 0)
+                {
+                    stolb = j;
+                    for (int jj = stolb; jj < m - 1; ++jj)
+                          for (int ii = 0; ii < n; ++ii)
+                            a[ii, jj] = a[ii, jj+1];
+                    --m;
+                    j--;
+                }
+            }
+            Console.WriteLine();
+            return a;
+        }
+
+        static int[,] UdalNul(int[,] a, ref int n, ref int m)
+        {
+            int flag, stroka, stolb;
+            for (int i = 0; i < n; ++i)
+            {
+                flag = 1;
+                for (int j = 0; j < m; ++j)
+                    if (a[i, j] != 0)
+                        flag = 0;
+                if (flag == 1)
+                {
+                    stroka = i;
+                    for (int ii = stroka; ii < n - 1; ++ii)
+                        for (int jj = 0; jj < m; ++jj)
+                            a[ii, jj] = a[ii + 1, jj];
+                    --n;
+                }
+            }
+      
+                for (int j = 0; j < m; ++j)
+            {
+                flag = 1;
+                for (int i = 0; i < n; ++i)
+                    if (a[i, j] != 0)
+                        flag = 0;
+                if (flag == 1)
+                {
+                    stolb = j;
+                    for (int jj = stolb; jj < m - 1; ++jj)
+                        for (int ii = 0; ii < n; ++ii)
+                            a[ii, jj] = a[ii, jj + 1];
+                    --m;
+                                    }
+                                        }
+                        Console.WriteLine();
+            return a;
+        }
+        
+        static int[,] UdalStrokaStolb(int[,] a, ref int n, ref int m, int iii, int jjj)
+        {
+            int sh = 0, stolb, stroka;
+            for (int j = 0; j < m; ++j)
+                if (a[iii, j] == a[j, jjj])
+                    sh++;
+            if (sh == n)
+            {
+                stolb = jjj;
+                for (int jj = stolb; jj < m - 1; ++jj)
+                    for (int ii = 0; ii < n; ++ii)
+
+                        a[ii, jj] = a[ii, jj + 1];
+                --m;
+                {
+                    stroka = iii;
+                    for (int ii = stroka; ii < n - 1; ++ii)
+                        for (int jj = 0; jj < m; ++jj)
+                            a[ii, jj] = a[ii + 1, jj];
+                    --n;
+                }
+            }
+            Console.WriteLine();
+            return a;
+        }
+        
+        static void Main()
+        {
+            try
+            {
+                int n, m, id, iii, jjj;
+                int[,] myArray = Input(out n, out m);
+                Console.WriteLine("исходный массив:");
+                Print(myArray, n, m);
+                Console.WriteLine("укажите строку и столбец для удаления при совпадении элементов");
+                iii = int.Parse(Console.ReadLine());
+                jjj = int.Parse(Console.ReadLine());
+                Console.WriteLine("Удаление из массива совпадающих строки и столбца:");
+                myArray = UdalStrokaStolb(myArray, ref n, ref m, iii, jjj);
+                Print(myArray, n, m);
+                Console.WriteLine("массив с новой строкой после строки с минимальным элементом:");
+                myArray = PlusStroka(myArray, ref n, ref m);
+                Print(myArray, n, m);
+                Console.WriteLine("выберите элемент в столбце");
+                id = int.Parse(Console.ReadLine());
+                myArray = PlusStolbets(myArray, ref n, ref m, id);
+                Console.WriteLine("массив с новыми столбцами перед столбцами с выбранным элементом:");
+                Print(myArray, n, m);
+                Console.WriteLine("массив без нулевых строк и столбцов:");
+                myArray = UdalNul(myArray, ref n, ref m);
+                Print(myArray, n, m);
+                Console.WriteLine("Удаление всех строк, в которых нет ни одного четного элемента:");
+                myArray = UdalNeChetStrok(myArray, ref n, ref m);
+                Print(myArray, n, m);
+                Console.WriteLine("Удаление всех столбцов, в которых только положительные элементы:");
+                myArray = UdalPolozStolb(myArray, ref n, ref m);
+                Print(myArray, n, m);
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("неверный формат ввода данных");
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine("переполнение");
+            }
+            catch (OutOfMemoryException)
+            {
+                Console.WriteLine("недостаточно памяти для создания нового объекта");
+            }
+            catch { Console.WriteLine("в программе возникла ошибка"); }
+            Console.Read();
+        }
+    }
+}
